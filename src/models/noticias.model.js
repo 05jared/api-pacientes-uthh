@@ -16,3 +16,13 @@ export const createNoticia = async (data) => {
   );
   return { id: result.insertId, titulo, descripcion, imagen, enlace };
 };
+
+export const updateNoticia = async (id, data) => {
+  const { titulo, descripcion, imagen, enlace } = data;
+  const [result] = await db.query(
+    `UPDATE noticias SET titulo=?, descripcion=?, imagen=?, enlace=? 
+     WHERE id_noticia=?`,
+    [titulo, descripcion, imagen, enlace, id]
+  );
+  return result;
+};

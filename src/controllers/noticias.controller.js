@@ -23,3 +23,13 @@ export const createNoticia = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const updateNoticia = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await noticiaModel.updateNoticia(id, req.body);
+    res.status(200).json({ msg: "Noticia actualizada", result });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
