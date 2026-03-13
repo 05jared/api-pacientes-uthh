@@ -16,3 +16,9 @@ export const createLog = async (data) => {
   );
   return { id: result.insertId, tipo, id_registro, descripcion, usuario_sesion };
 };
+export const deleteLog = async (id) => {
+  const [result] = await db.query(
+    'DELETE FROM log_eliminaciones WHERE id_log=?', [id]
+  );
+  return result;
+};

@@ -18,3 +18,21 @@ export const createUsuario = async (data) => {
   return { id: result.insertId, nombre, apellido_paterno, 
            apellido_materno, correo, rol };
 };
+export const updateUsuario = async (id, data) => {
+  const { nombre, apellido_paterno, apellido_materno, 
+          correo, contrasena, rol } = data;
+
+  const [result] = await db.query(
+    `UPDATE usuarios SET nombre=?, apellido_paterno=?, apellido_materno=?,
+     correo=?, contrasena=?, rol=? WHERE id_usuarios=?`,
+    [nombre, apellido_paterno, apellido_materno, correo, contrasena, rol, id]
+  );
+  return result;
+};
+
+export const deleteUsuario = async (id) => {
+  const [result] = await db.query(
+    'DELETE FROM usuarios WHERE id_usuarios=?', [id]
+  );
+  return result;
+};

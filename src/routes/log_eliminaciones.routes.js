@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import * as ctrl from '../controllers/log_eliminaciones.controller.js';
+import * as ctrl from '../controllers/logs.controller.js';
 
 const router = Router();
 
 router.get('/', ctrl.getLogs);
-router.post('/', ctrl.createLog);
+router.delete('/:id', ctrl.deleteLog);
 
 export default router;

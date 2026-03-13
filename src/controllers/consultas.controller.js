@@ -25,3 +25,22 @@ export const createConsulta = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 }; 
+export const updateConsulta = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await consultaModel.updateConsulta(id, req.body);
+    res.status(200).json({ msg: "Consulta actualizada", result });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const deleteConsulta = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await consultaModel.deleteConsulta(id);
+    res.status(200).json({ msg: "Consulta eliminada", result });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

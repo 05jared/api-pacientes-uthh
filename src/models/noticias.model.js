@@ -26,3 +26,9 @@ export const updateNoticia = async (id, data) => {
   );
   return result;
 };
+export const deleteNoticia = async (id) => {
+  const [result] = await db.query(
+    'DELETE FROM noticias WHERE id_noticia=?', [id]
+  );
+  return result;
+};

@@ -23,3 +23,12 @@ export const createLog = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+export const deleteLog = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await logModel.deleteLog(id);
+    res.status(200).json({ msg: "Log eliminado", result });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

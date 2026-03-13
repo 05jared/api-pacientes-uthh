@@ -33,3 +33,13 @@ export const updateNoticia = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const deleteNoticia = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await noticiaModel.deleteNoticia(id);
+    res.status(200).json({ msg: "Noticia eliminada", result });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

@@ -22,3 +22,21 @@ export const createTratamiento = async (data) => {
   return { id: result.insertId, id_diagnostico, medicamento, 
            dosis, frecuencia, duracion, indicaciones };
 };
+export const updateTratamiento = async (id, data) => {
+  const { id_diagnostico, medicamento, dosis, 
+          frecuencia, duracion, indicaciones } = data;
+
+  const [result] = await db.query(
+    `UPDATE tratamiento SET id_diagnostico=?, medicamento=?, dosis=?,
+     frecuencia=?, duracion=?, indicaciones=? WHERE id_tratamiento=?`,
+    [id_diagnostico, medicamento, dosis, frecuencia, duracion, indicaciones, id]
+  );
+  return result;
+};
+
+export const deleteTratamiento = async (id) => {
+  const [result] = await db.query(
+    'DELETE FROM tratamiento WHERE id_tratamiento=?', [id]
+  );
+  return result;
+};

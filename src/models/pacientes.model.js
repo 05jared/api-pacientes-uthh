@@ -28,3 +28,27 @@ export const createPaciente = async (data) => {
            tipopaciente, matricula_o_numero_trabajador, fecha_nacimiento,
            sexo, correo, telefono, direccion, Grupo, Cuatrimestre, Carrera };
 };
+
+export const updatePaciente = async (id, data) => {
+  const { nombre, apellido_materno, apellido_paterno, tipopaciente,
+          matricula_o_numero_trabajador, fecha_nacimiento, sexo,
+          correo, telefono, direccion, Grupo, Cuatrimestre, Carrera } = data;
+
+  const [result] = await db.query(
+    `UPDATE pacientess SET nombre=?, apellido_materno=?, apellido_paterno=?,
+     tipopaciente=?, matricula_o_numero_trabajador=?, fecha_nacimiento=?,
+     sexo=?, correo=?, telefono=?, direccion=?, Grupo=?, Cuatrimestre=?, Carrera=?
+     WHERE id_paciente=?`,
+    [nombre, apellido_materno, apellido_paterno, tipopaciente,
+     matricula_o_numero_trabajador, fecha_nacimiento, sexo,
+     correo, telefono, direccion, Grupo, Cuatrimestre, Carrera, id]
+  );
+  return result;
+};
+
+export const deletePaciente = async (id) => {
+  const [result] = await db.query(
+    'DELETE FROM pacientess WHERE id_paciente=?', [id]
+  );
+  return result;
+};

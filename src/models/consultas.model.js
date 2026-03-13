@@ -22,3 +22,22 @@ export const createConsulta = async (data) => {
   return { id: result.insertId, id_paciente, fecha_consulta, 
            hora_consulta, motivo_consulta, consultasalida };
 };
+
+export const updateConsulta = async (id, data) => {
+  const { id_paciente, fecha_consulta, hora_consulta, 
+          motivo_consulta, consultasalida } = data;
+
+  const [result] = await db.query(
+    `UPDATE consultas SET id_paciente=?, fecha_consulta=?, hora_consulta=?,
+     motivo_consulta=?, consultasalida=? WHERE id_consulta=?`,
+    [id_paciente, fecha_consulta, hora_consulta, motivo_consulta, consultasalida, id]
+  );
+  return result;
+};
+
+export const deleteConsulta = async (id) => {
+  const [result] = await db.query(
+    'DELETE FROM consultas WHERE id_consulta=?', [id]
+  );
+  return result;
+};

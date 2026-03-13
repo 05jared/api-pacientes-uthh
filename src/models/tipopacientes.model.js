@@ -14,3 +14,20 @@ export const createTipoPaciente = async (data) => {
   );
   return { id: result.insertId, descripcion };
 };
+
+export const updateTipoPaciente = async (id, data) => {
+  const { tipo } = data;
+
+  const [result] = await db.query(
+    `UPDATE tipopacientes SET tipo=? WHERE id_tipo=?`,
+    [tipo, id]
+  );
+  return result;
+};
+
+export const deleteTipoPaciente = async (id) => {
+  const [result] = await db.query(
+    'DELETE FROM tipopacientes WHERE id_tipo=?', [id]
+  );
+  return result;
+};
