@@ -28,7 +28,7 @@ app.use('/api/tipopacientes', tipopacientesRoutes);
 app.use('/api/logs', logEliminacionesRoutes);
 
 app.get('/', (req, res) => {
-  res.send('API Pacientes UTHH');
+  res.send('API Pacientes UTHH hola ');
 });
 
 app.listen(port, () => {
