@@ -13,7 +13,6 @@ import tipopacientesRoutes from './routes/tipopacientes.routes.js';
 import logEliminacionesRoutes from './routes/log_eliminaciones.routes.js';
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -28,9 +27,7 @@ app.use('/api/tipopacientes', tipopacientesRoutes);
 app.use('/api/logs', logEliminacionesRoutes);
 
 app.get('/', (req, res) => {
-  res.send('API Pacientes UTHH hola xd ');
+  res.send('API Pacientes UTHH funcionando');
 });
 
-app.listen(port, () => {
-  console.log(`Servidor escuchando en el puerto ${port}`);
-});
+export default app;
