@@ -1,11 +1,12 @@
 import { Router } from 'express';
+import verificarToken from '../middleware/auth.middleware.js';
 import * as ctrl from '../controllers/consultas.controller.js';
 
 const router = Router();
 
 router.get('/', ctrl.getConsultas);
-router.post('/', ctrl.createConsulta);
-router.put('/:id', ctrl.updateConsulta);
-router.delete('/:id', ctrl.deleteConsulta);
+router.post('/', verificarToken, ctrl.createConsulta);
+router.put('/:id', verificarToken, ctrl.updateConsulta);
+router.delete('/:id', verificarToken, ctrl.deleteConsulta);
 
 export default router;

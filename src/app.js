@@ -11,12 +11,14 @@ import usuariosRoutes from './routes/usuarios.routes.js';
 import noticiasRoutes from './routes/noticias.routes.js';
 import tipopacientesRoutes from './routes/tipopacientes.routes.js';
 import logEliminacionesRoutes from './routes/log_eliminaciones.routes.js';
+import authRoutes from './routes/auth.routes.js';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+app.use('/api/auth', authRoutes);
 app.use('/api/pacientes', pacientesRoutes);
 app.use('/api/consultas', consultasRoutes);
 app.use('/api/diagnostico', diagnosticoRoutes);
@@ -29,5 +31,9 @@ app.use('/api/logs', logEliminacionesRoutes);
 app.get('/', (req, res) => {
   res.send('API Pacientes UTHH funcionando');
 });
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Servidor corriendo en puerto ${port}`));
+
 
 export default app;

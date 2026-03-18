@@ -36,3 +36,10 @@ export const deleteUsuario = async (id) => {
   );
   return result;
 };
+
+export const findUsuarioByCorreo = async (correo) => {
+  const [rows] = await db.query(
+    'SELECT * FROM usuarios WHERE correo = ?', [correo]
+  );
+  return rows[0];
+};
