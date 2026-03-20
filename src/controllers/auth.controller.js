@@ -3,9 +3,9 @@ import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import * as usuarioModel from '../models/usuarios.model.js';
 
-/* ── Verifica el token de reCAPTCHA con los servidores de Google ── */
+/* ── Verifica el token de reCAPTCHA con Google ── */
 const verificarCaptcha = async (token) => {
-  const secret = '6Lf10JAsAAAAAIBy6uZYRBTU1Kcp19urLUPJc_j4';
+  const secret = '6LeADZEsAAAAAItODAgwJQ08nyRcUWFmUyRnMrJK';
   const { data } = await axios.post(
     `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`
   );
@@ -16,12 +16,10 @@ export const login = async (req, res) => {
   try {
     const { correo, contrasena, recaptchaToken } = req.body;
 
-    // ── 1. Validar campos obligatorios ──
     if (!correo || !contrasena) {
       return res.status(400).json({ message: 'Todos los campos son obligatorios' });
     }
 
-    // ── 2. Verificar reCAPTCHA con Google ──
     if (!recaptchaToken) {
       return res.status(400).json({ message: 'Token de reCAPTCHA requerido' });
     }
@@ -31,7 +29,6 @@ export const login = async (req, res) => {
       return res.status(403).json({ message: 'Verificación de seguridad fallida' });
     }
 
-    // ── 3. Verificar usuario y contraseña ──
     const usuario = await usuarioModel.findUsuarioByCorreo(correo);
     if (!usuario) {
       return res.status(401).json({ message: 'Credenciales inválidas' });
@@ -42,7 +39,6 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: 'Credenciales inválidas' });
     }
 
-    // ── 4. Generar JWT ──
     const token = jwt.sign(
       { id: usuario.id_usuarios, correo: usuario.correo, rol: usuario.rol },
       process.env.JWT_SECRET,
