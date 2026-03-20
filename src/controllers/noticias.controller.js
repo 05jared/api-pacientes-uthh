@@ -43,3 +43,16 @@ export const deleteNoticia = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+export const getNoticiasExternas = async (req, res) => {
+  try {
+    const NEWSDATA_KEY = process.env.NEWSDATA_KEY;
+    const url = `https://newsdata.io/api/1/latest?apikey=${NEWSDATA_KEY}&category=health&language=es&country=mx`;
+    
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
