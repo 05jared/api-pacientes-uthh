@@ -11,10 +11,3 @@ router.put('/:id', verificarToken, ctrl.updateNoticia);
 router.delete('/:id', verificarToken, ctrl.deleteNoticia);
 
 export default router;
-```
-
----
-
-### 3. `.env` — agrega tu API key:
-```
-NEWSDATA_KEY=pub_b6479f60221e4951bc4741f196146870
