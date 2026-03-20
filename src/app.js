@@ -29,7 +29,7 @@ app.use('/api/tipopacientes', tipopacientesRoutes);
 app.use('/api/logs', logEliminacionesRoutes);
 
 app.get('/', (req, res) => {
-  res.send('API Pacientes UTHH funcionando');
+  res.send('API Pacientes UTHH funcionando al 0% ');
 });
 
 const port = process.env.PORT || 3000;
