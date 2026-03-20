@@ -1,65 +1,150 @@
-import db from '../config/db.js';
+const API = 'https://api-pacientes-uthh.vercel.app/api';
 
-// Usa la vista v_pacientes
-export const getAllPacientes = async () => {
-  const [rows] = await db.query('SELECT * FROM v_pacientes ORDER BY nombre ASC');
-  return rows;
-};
+let esPaciente = false;
 
-export const getPacienteById = async (id) => {
-  const [rows] = await db.query(
-    'SELECT * FROM v_pacientes WHERE id_paciente = ?', [id]
-  );
-  return rows[0];
-};
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+});
 
-// Usa el procedimiento sp_registrar_paciente
-export const createPaciente = async (data) => {
-  const { nombre, apellido_materno, apellido_paterno, tipopaciente,
-          matricula_o_numero_trabajador, fecha_nacimiento, sexo,
-          correo, telefono, direccion, Grupo, Cuatrimestre, Carrera } = data;
+const btnMenu = document.getElementById('btn-hamburguesa');
+const menuMov = document.getElementById('menu-movil');
 
-  await db.query(
-    'CALL sp_registrar_paciente(?,?,?,?,?,?,?,?,?,?,?,?,?,@resultado)',
-    [nombre, apellido_paterno, apellido_materno, tipopaciente,
-     matricula_o_numero_trabajador, fecha_nacimiento, sexo,
-     correo, telefono, direccion, Grupo, Cuatrimestre, Carrera]
-  );
+btnMenu.addEventListener('click', () => {
+  menuMov.classList.toggle('abierto');
+  btnMenu.classList.toggle('abierto');
+});
 
-  const [[out]] = await db.query('SELECT @resultado AS resultado');
-  const resultado = out.resultado;
+document.addEventListener('click', (e) => {
+  if (!btnMenu.contains(e.target) && !menuMov.contains(e.target)) {
+    menuMov.classList.remove('abierto');
+    btnMenu.classList.remove('abierto');
+  }
+});
 
-  if (resultado.startsWith('ERROR')) throw new Error(resultado);
-  return { mensaje: resultado };
-};
+document.getElementById('btn-toggle-pass').addEventListener('click', () => {
+  const pass = document.getElementById('password');
+  pass.type = pass.type === 'password' ? 'text' : 'password';
+});
 
-export const updatePaciente = async (id, data) => {
-  const { nombre, apellido_materno, apellido_paterno, tipopaciente,
-          matricula_o_numero_trabajador, fecha_nacimiento, sexo,
-          correo, telefono, direccion, Grupo, Cuatrimestre, Carrera } = data;
+function detectarTipo(val) {
+  esPaciente = /^\d{5,}$/.test(val.trim());
+  const campoPass = document.getElementById('campo-password');
+  const hint = document.getElementById('login-hint');
 
-  const [result] = await db.query(
-    `UPDATE pacientess SET nombre=?, apellido_materno=?, apellido_paterno=?,
-     tipopaciente=?, matricula_o_numero_trabajador=?, fecha_nacimiento=?,
-     sexo=?, correo=?, telefono=?, direccion=?, Grupo=?, Cuatrimestre=?, Carrera=?
-     WHERE id_paciente=?`,
-    [nombre, apellido_materno, apellido_paterno, tipopaciente,
-     matricula_o_numero_trabajador, fecha_nacimiento, sexo,
-     correo, telefono, direccion, Grupo, Cuatrimestre, Carrera, id]
-  );
-  return result;
-};
+  if (esPaciente) {
+    campoPass.style.display = 'none';
+    hint.classList.add('visible');
+    document.getElementById('password').value = '';
+  } else {
+    campoPass.style.display = 'flex';
+    hint.classList.remove('visible');
+  }
+}
 
-export const deletePaciente = async (id) => {
-  const [result] = await db.query(
-    'DELETE FROM pacientess WHERE id_paciente=?', [id]
-  );
-  return result;
-};
+function validar() {
+  const user = document.getElementById('usuario').value.trim();
+  const pass = document.getElementById('password').value.trim();
+  let ok = true;
 
-export const findUsuarioByCorreo = async (correo) => {
-  const [rows] = await db.query(
-    'SELECT * FROM usuarios WHERE correo = ?', [correo]
-  );
-  return rows[0];
-};
+  if (!user) {
+    document.getElementById('usuario').classList.add('input-error');
+    document.getElementById('error-usuario').classList.add('visible');
+    ok = false;
+  } else {
+    document.getElementById('usuario').classList.remove('input-error');
+    document.getElementById('error-usuario').classList.remove('visible');
+  }
+
+  if (!esPaciente && !pass) {
+    document.getElementById('password').classList.add('input-error');
+    document.getElementById('error-password').classList.add('visible');
+    ok = false;
+  } else {
+    document.getElementById('password').classList.remove('input-error');
+    document.getElementById('error-password').classList.remove('visible');
+  }
+
+  return ok;
+}
+
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  document.getElementById('login-error').classList.remove('visible');
+  if (!validar()) return;
+
+  const user = document.getElementById('usuario').value.trim();
+  const pass = document.getElementById('password').value.trim();
+  const btn = document.getElementById('btn-login');
+
+  btn.disabled = true;
+  btn.textContent = 'Verificando...';
+
+  try {
+    if (esPaciente) {
+      const data = await fetch(`${API}/pacientes`).then(r => r.json());
+      console.log('Campos del paciente:', data[0] ? Object.keys(data[0]) : 'Sin datos');
+      console.log('Buscando:', user);
+      const p = data.find(x =>
+        String(x.matricula_o_numero_trabajador) === String(user) ||
+        String(x.matricula) === String(user)
+      );
+      console.log('Encontrado:', p);
+
+      if (p) {
+        localStorage.setItem('usuario', JSON.stringify(p));
+        localStorage.setItem('rol', 'paciente');
+        window.location.href = 'historial.html';
+      } else {
+        mostrarError('Matrícula no encontrada.');
+      }
+
+    } else {
+      const res = await fetch(`${API}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ correo: user, contrasena: pass })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        mostrarError(data.message || 'Credenciales inválidas.');
+        return;
+      }
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('usuario', JSON.stringify(data.usuario));
+      localStorage.setItem('rol', data.usuario.rol);
+
+      if (data.usuario.rol === 'Administrador') {
+        window.location.href = 'logeoadmin.html';
+      } else if (data.usuario.rol === 'Recepcionista') {
+        window.location.href = 'logeoRecepcion.html';
+      } else {
+        window.location.href = 'plantilla.html';
+      }
+    }
+
+  } catch (err) {
+    mostrarError('No se pudo conectar al servidor.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Ingresar al Sistema';
+  }
+});
+
+function mostrarError(msg) {
+  document.getElementById('login-error-msg').textContent = msg;
+  document.getElementById('login-error').classList.add('visible');
+}
+
+document.getElementById('usuario').addEventListener('input', () => {
+  document.getElementById('login-error').classList.remove('visible');
+});
+
+document.getElementById('password').addEventListener('input', () => {
+  document.getElementById('login-error').classList.remove('visible');
+  document.getElementById('password').classList.remove('input-error');
+  document.getElementById('error-password').classList.remove('visible');
+});
