@@ -5,7 +5,7 @@ import * as usuarioModel from '../models/usuarios.model.js';
 
 /* ── Verifica el token de reCAPTCHA con Google ── */
 const verificarCaptcha = async (token) => {
-  const secret = '6LeADZEsAAAAAItODAgwJQ08nyRcUWFmUyRnMrJK';
+  const secret = '6LeaEpEsAAAAADQBU-pHqg23C1gHHJkTDf_T6ZbZ';
   const { data } = await axios.post(
     `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`
   );
