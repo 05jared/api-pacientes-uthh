@@ -58,6 +58,6 @@ export const login = async (req, res) => {
     });
 
   } catch (error) {
-    res.status(500).json({ error: 'Error en el proceso de login' });
+    res.status(500).json({ error: 'Error en el proceso de login' });;
   }
 };
