@@ -14,9 +14,9 @@ function validarUsuario({ nombre, apellido_paterno, apellido_materno, correo, co
     return "Apellido paterno inválido";
   }
 
-  if (!apellido_materno || !regexNombre.test(apellido_materno)) {
-    return "Apellido materno inválido";
-  }
+if (apellido_materno && !regexNombre.test(apellido_materno)) {
+  return "Apellido materno inválido";
+}
 
   if (!correo || !regexCorreo.test(correo)) {
     return "Correo inválido";
@@ -49,12 +49,12 @@ export const getUsuarios = async (req, res) => {
 
 export const createUsuario = async (req, res) => {
   try {
-    const { nombre, apellido_paterno, apellido_materno, correo, contrasena, rol } = req.body;
-
     const error = validarUsuario(req.body, false);
-    if (error) {
-      return res.status(400).json({ error });
-    }
+    if (error) return res.status(400).json({ error });
+
+    // Verificar correo duplicado
+    const existe = await usuarioModel.findUsuarioByCorreo(req.body.correo);
+    if (existe) return res.status(409).json({ error: 'El correo electrónico ya está registrado.' });
 
     const nuevo = await usuarioModel.createUsuario(req.body);
     res.status(201).json(nuevo);
