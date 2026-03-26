@@ -20,18 +20,20 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: 'Todos los campos son obligatorios' });
     }
 
-    const isTest = process.env.NODE_ENV === 'test';
-
-    if (!isTest) {
-      if (!recaptchaToken) {
-        return res.status(400).json({ message: 'Token de reCAPTCHA requerido' });
-      }
-
-      const captchaValido = await verificarCaptcha(recaptchaToken);
-      if (!captchaValido) {
-        return res.status(403).json({ message: 'Verificación de seguridad fallida' });
-      }
+    // ╔══════════════════════════════════════════════════╗
+    // ║  PRUEBAS: reCAPTCHA desactivado temporalmente   ║
+    // ║  Para reactivar: quita los /* */ de este bloque ║
+    // ╚══════════════════════════════════════════════════╝
+    /*
+    if (!recaptchaToken) {
+      return res.status(400).json({ message: 'Token de reCAPTCHA requerido' });
     }
+
+    const captchaValido = await verificarCaptcha(recaptchaToken);
+    if (!captchaValido) {
+      return res.status(403).json({ message: 'Verificación de seguridad fallida' });
+    }
+    */
 
     const usuario = await usuarioModel.findUsuarioByCorreo(correo);
     if (!usuario) {
