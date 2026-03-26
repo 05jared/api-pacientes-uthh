@@ -5,7 +5,7 @@ import * as ctrl from '../controllers/noticias.controller.js';
 const router = Router();
 
 router.get('/', ctrl.getNoticias);
-router.get('/externas', ctrl.getNoticiasExternas); // 👈 nueva línea
+router.get('/externas', ctrl.getNoticiasExternas); 
 router.post('/', verificarToken, ctrl.createNoticia);
 router.put('/:id', verificarToken, ctrl.updateNoticia);
 router.delete('/:id', verificarToken, ctrl.deleteNoticia);

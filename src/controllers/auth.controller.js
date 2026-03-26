@@ -20,13 +20,17 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: 'Todos los campos son obligatorios' });
     }
 
-    if (!recaptchaToken) {
-      return res.status(400).json({ message: 'Token de reCAPTCHA requerido' });
-    }
+    const isTest = process.env.NODE_ENV === 'test';
 
-    const captchaValido = await verificarCaptcha(recaptchaToken);
-    if (!captchaValido) {
-      return res.status(403).json({ message: 'Verificación de seguridad fallida' });
+    if (!isTest) {
+      if (!recaptchaToken) {
+        return res.status(400).json({ message: 'Token de reCAPTCHA requerido' });
+      }
+
+      const captchaValido = await verificarCaptcha(recaptchaToken);
+      if (!captchaValido) {
+        return res.status(403).json({ message: 'Verificación de seguridad fallida' });
+      }
     }
 
     const usuario = await usuarioModel.findUsuarioByCorreo(correo);
@@ -48,16 +52,16 @@ export const login = async (req, res) => {
     res.json({
       token,
       usuario: {
-        id_usuarios:      usuario.id_usuarios,
-        nombre:           usuario.nombre,
+        id_usuarios: usuario.id_usuarios,
+        nombre: usuario.nombre,
         apellido_paterno: usuario.apellido_paterno,
         apellido_materno: usuario.apellido_materno,
-        correo:           usuario.correo,
-        rol:              usuario.rol
+        correo: usuario.correo,
+        rol: usuario.rol
       }
     });
 
   } catch (error) {
-    res.status(500).json({ error: 'Error en el proceso de login' });;
+    res.status(500).json({ error: 'Error en el proceso de login' });
   }
 };
