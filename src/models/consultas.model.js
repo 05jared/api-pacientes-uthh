@@ -56,3 +56,11 @@ export const deleteConsulta = async (id) => {
   const [[out]] = await db.query('SELECT @resultado AS resultado');
   return out.resultado;
 };
+
+export const getConsultasByPaciente = async (id_paciente) => {
+  const [rows] = await db.query(
+    'SELECT * FROM v_consultas WHERE id_paciente = ? ORDER BY fecha_consulta DESC',
+    [id_paciente]
+  );
+  return rows;
+};

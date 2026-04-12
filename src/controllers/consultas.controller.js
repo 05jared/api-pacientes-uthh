@@ -2,7 +2,10 @@ import * as consultaModel from '../models/consultas.model.js';
 
 export const getConsultas = async (req, res) => {
   try {
-    const consultas = await consultaModel.getAllConsultas();
+    const { id_paciente } = req.query;
+    const consultas = id_paciente
+      ? await consultaModel.getConsultasByPaciente(id_paciente)
+      : await consultaModel.getAllConsultas();
     res.status(200).json(consultas);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -54,3 +57,4 @@ export const deleteConsulta = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
