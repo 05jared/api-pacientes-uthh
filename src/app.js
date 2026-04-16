@@ -27,7 +27,7 @@ app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/noticias', noticiasRoutes);
 app.use('/api/tipopacientes', tipopacientesRoutes);
 app.use('/api/logs', logEliminacionesRoutes);
-const medicamentosRoutes = require('./routes/medicamentos.routes');
+import medicamentosRoutes from './routes/medicamentos.routes.js';
 
 app.use('/api/medicamentos', medicamentosRoutes);
 
