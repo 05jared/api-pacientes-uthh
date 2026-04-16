@@ -4,6 +4,6 @@ import * as ctrl from '../controllers/medicamentos.controller.js';
 
 const router = Router();
 
-router.get('/', verificarToken, ctrl.getMedicamentos);
+router.get('/', ctrl.getMedicamentos);
 
 export default router;
