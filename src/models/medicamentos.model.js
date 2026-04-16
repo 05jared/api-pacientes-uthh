@@ -1,13 +1,15 @@
-const db = require('../config/db');
+import db from '../config/db.js';
 
 const MedicamentosModel = {
-  getAll: (callback) => {
+  getAll: async () => {
     const sql = `
       SELECT clave, nombre, stock_inicial, consumo_por_paciente
       FROM medicamentos
     `;
-    db.query(sql, callback);
+    
+    const [rows] = await db.query(sql);
+    return rows;
   }
 };
 
-module.exports = MedicamentosModel;
+export default MedicamentosModel;

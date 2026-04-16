@@ -12,6 +12,7 @@ import noticiasRoutes from './routes/noticias.routes.js';
 import tipopacientesRoutes from './routes/tipopacientes.routes.js';
 import logEliminacionesRoutes from './routes/log_eliminaciones.routes.js';
 import authRoutes from './routes/auth.routes.js';
+import medicamentosRoutes from './routes/medicamentos.routes.js';
 
 const app = express();
 
@@ -27,12 +28,10 @@ app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/noticias', noticiasRoutes);
 app.use('/api/tipopacientes', tipopacientesRoutes);
 app.use('/api/logs', logEliminacionesRoutes);
-import medicamentosRoutes from './routes/medicamentos.routes.js';
-
 app.use('/api/medicamentos', medicamentosRoutes);
 
 app.get('/', (req, res) => {
-  res.send('API Pacientes UTHH funcionando al 0% ');
+  res.send('API Pacientes UTHH funcionando al 0% ');  
 });
 
 const port = process.env.PORT || 3000;

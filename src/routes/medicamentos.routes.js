@@ -1,8 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const MedicamentosController = require('../controllers/medicamentos.controller');
-const { verificarToken } = require('../middleware/auth.middleware');
+import { Router } from 'express';
+import MedicamentosController from '../controllers/medicamentos.controller.js';
+import { verificarToken } from '../middleware/auth.middleware.js';
+
+const router = Router();
 
 router.get('/', verificarToken, MedicamentosController.getAll);
 
-module.exports = router;
+export default router;
