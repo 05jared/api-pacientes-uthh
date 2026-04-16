@@ -27,6 +27,9 @@ app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/noticias', noticiasRoutes);
 app.use('/api/tipopacientes', tipopacientesRoutes);
 app.use('/api/logs', logEliminacionesRoutes);
+const medicamentosRoutes = require('./routes/medicamentos.routes');
+
+app.use('/api/medicamentos', medicamentosRoutes);
 
 app.get('/', (req, res) => {
   res.send('API Pacientes UTHH funcionando al 0% ');
@@ -34,6 +37,7 @@ app.get('/', (req, res) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Servidor corriendo en puerto ${port}`));
+
 
 
 export default app;
