@@ -17,12 +17,10 @@ export const updateStock = async (req, res) => {
 
     console.log('→ updateStock llamado con clave:', clave, '| cantidad:', cantidad);
 
-    if (!cantidad || Number(cantidad) <= 0) {
+    if (cantidad === undefined || cantidad === null || isNaN(Number(cantidad)) || Number(cantidad) === 0) {
       return res.status(400).json({ error: 'Cantidad inválida' });
     }
-
     await MedicamentosModel.updateStock(clave, Number(cantidad));
-
     res.json({ msg: 'Stock actualizado correctamente' });
 
   } catch (err) {
@@ -36,4 +34,5 @@ export const updateStock = async (req, res) => {
     }
 
     res.status(500).json({ error: 'Error al actualizar stock' });
-  }};
+  }
+};
