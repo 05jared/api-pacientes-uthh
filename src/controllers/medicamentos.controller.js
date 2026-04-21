@@ -15,20 +15,25 @@ export const updateStock = async (req, res) => {
     const { clave } = req.params;
     const { cantidad } = req.body;
 
-    if (!cantidad || cantidad <= 0) {
+    console.log('→ updateStock llamado con clave:', clave, '| cantidad:', cantidad);
+
+    if (!cantidad || Number(cantidad) <= 0) {
       return res.status(400).json({ error: 'Cantidad inválida' });
     }
 
-    const result = await MedicamentosModel.updateStock(clave, cantidad);
-
-    if (result.affectedRows === 0) {
-      return res.status(400).json({ error: 'Stock insuficiente o medicamento no encontrado' });
-    }
+    await MedicamentosModel.updateStock(clave, Number(cantidad));
 
     res.json({ msg: 'Stock actualizado correctamente' });
-  } catch (err) {
-    console.error('Error al actualizar stock:', err);
-    res.status(500).json({ error: 'Error al actualizar stock' });
-  }
-};
 
+  } catch (err) {
+    console.error('Error al actualizar stock:', err.message);
+
+    if (err.message === 'Medicamento no encontrado') {
+      return res.status(404).json({ error: err.message });
+    }
+    if (err.message === 'Stock insuficiente') {
+      return res.status(400).json({ error: err.message });
+    }
+
+    res.status(500).json({ error: 'Error al actualizar stock' });
+  }};
