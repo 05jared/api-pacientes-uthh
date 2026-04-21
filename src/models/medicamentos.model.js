@@ -17,3 +17,12 @@ export const getMedicamentos = async () => {
   const [rows] = await db.query(sql);
   return rows;
 };
+
+export const updateStock = async (clave, cantidad) => {
+  const [result] = await db.query(
+    `UPDATE medicamentos SET stock_inicial = stock_inicial - ? WHERE clave = ? AND stock_inicial >= ?`,
+    [cantidad, clave, cantidad]
+  );
+  return result;
+};
+
