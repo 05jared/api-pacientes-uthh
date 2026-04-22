@@ -42,9 +42,15 @@ export const getPacientesPorDiaReal = async () => {
       m.clave,
       m.nombre,
       m.stock_inicial,
-      m.consumo_por_paciente,
       m.proveedor,
       m.reposiciones_anio,
+      COALESCE(
+        GREATEST(
+          ROUND(AVG(t.dosis), 0),
+          1
+        ),
+        m.consumo_por_paciente
+      ) AS consumo_por_paciente,
       COALESCE(
         GREATEST(
           ROUND(
