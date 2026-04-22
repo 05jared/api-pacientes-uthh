@@ -31,7 +31,7 @@ app.use('/api/logs', logEliminacionesRoutes);
 app.use('/api/medicamentos', medicamentosRoutes);
 app.use('/api/reposiciones', reposicionesRoutes);
 app.get('/', (req, res) => {
-  res.send('API Pacientes UTHH funcionando al 0% ');  
+  res.send('API Pacientes UTHH funcionando al 0454545% ');  
 });
 
 const port = process.env.PORT || 3000;
