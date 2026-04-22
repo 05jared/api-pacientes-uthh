@@ -36,3 +36,12 @@ export const updateStock = async (req, res) => {
     res.status(500).json({ error: 'Error al actualizar stock' });
   }
 };
+
+export const getMedicamentosConDatos = async (req, res) => {
+  try {
+    const results = await MedicamentosModel.getPacientesPorDiaReal();
+    res.json(results);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

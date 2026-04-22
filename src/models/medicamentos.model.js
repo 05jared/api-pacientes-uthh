@@ -36,3 +36,29 @@ export const updateStock = async (clave, cantidad) => {
   );
   return result;
 };
+
+export const getPacientesPorDiaReal = async () => {
+  const [rows] = await db.query(`
+    SELECT
+      m.clave,
+      m.nombre,
+      m.stock_inicial,
+      m.consumo_por_paciente,
+      m.proveedor,
+      m.reposiciones_anio,
+      COALESCE(
+        ROUND(
+          COUNT(c.id_consulta) /
+          GREATEST(DATEDIFF(MAX(c.fecha_consulta), MIN(c.fecha_consulta)), 1)
+        , 2),
+        m.pacientes_por_dia
+      ) AS pacientes_por_dia
+    FROM medicamentos m
+    LEFT JOIN tratamiento t ON m.nombre = t.medicamento
+    LEFT JOIN diagnostico d ON t.id_diagnostico = d.id_diagnostico
+    LEFT JOIN consultas c ON d.id_consulta = c.id_consulta
+    GROUP BY m.clave, m.nombre, m.stock_inicial, m.consumo_por_paciente,
+             m.proveedor, m.reposiciones_anio, m.pacientes_por_dia
+  `);
+  return rows;
+};

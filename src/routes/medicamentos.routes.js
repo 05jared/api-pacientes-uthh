@@ -6,5 +6,6 @@ const router = Router();
 
 router.get('/', ctrl.getMedicamentos);
 router.put('/:clave/stock', verificarToken, ctrl.updateStock); // ← nueva ruta
+router.get('/con-datos', ctrl.getMedicamentosConDatos);
 
 export default router;

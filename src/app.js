@@ -13,7 +13,7 @@ import tipopacientesRoutes from './routes/tipopacientes.routes.js';
 import logEliminacionesRoutes from './routes/log_eliminaciones.routes.js';
 import authRoutes from './routes/auth.routes.js';
 import medicamentosRoutes from './routes/medicamentos.routes.js';
-
+import reposicionesRoutes from './routes/reposiciones.routes.js';
 const app = express();
 
 app.use(cors());
@@ -29,7 +29,7 @@ app.use('/api/noticias', noticiasRoutes);
 app.use('/api/tipopacientes', tipopacientesRoutes);
 app.use('/api/logs', logEliminacionesRoutes);
 app.use('/api/medicamentos', medicamentosRoutes);
-
+app.use('/api/reposiciones', reposicionesRoutes);
 app.get('/', (req, res) => {
   res.send('API Pacientes UTHH funcionando al 0% ');  
 });
