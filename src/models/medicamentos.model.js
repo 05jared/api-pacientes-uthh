@@ -60,7 +60,8 @@ export const getPacientesPorDiaReal = async () => {
           1
         ),
         m.pacientes_por_dia
-      ) AS pacientes_por_dia
+      ) AS pacientes_por_dia,
+      COUNT(c.id_consulta) AS total_consultas
     FROM medicamentos m
     LEFT JOIN tratamiento t ON m.nombre = t.medicamento
     LEFT JOIN diagnostico d ON t.id_diagnostico = d.id_diagnostico

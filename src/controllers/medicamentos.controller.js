@@ -42,6 +42,7 @@ export const getMedicamentosConDatos = async (req, res) => {
     const results = await MedicamentosModel.getPacientesPorDiaReal();
     res.json(results);
   } catch (err) {
+    console.error('Error al obtener medicamentos con datos:', err);
     res.status(500).json({ error: err.message });
   }
 };
