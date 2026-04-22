@@ -12,7 +12,7 @@ export const getReposiciones = async (req, res) => {
 
 export const createReposicion = async (req, res) => {
   try {
-    const { clave_medicamento, cantidad, fecha_reposicion, notas } = req.body;
+    const { clave_medicamento, cantidad, fecha_reposicion, notas, stock_antes } = req.body; // ← agrega stock_antes
 
     if (!clave_medicamento || !cantidad || !fecha_reposicion) {
       return res.status(400).json({ error: 'Faltan datos obligatorios' });
@@ -21,7 +21,7 @@ export const createReposicion = async (req, res) => {
       return res.status(400).json({ error: 'La cantidad debe ser mayor a 0' });
     }
 
-    const result = await ReposicionesModel.createReposicion(req.body);
+    const result = await ReposicionesModel.createReposicion(req.body); // req.body ya trae stock_antes
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
