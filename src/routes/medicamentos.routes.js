@@ -5,7 +5,7 @@ import * as ctrl from '../controllers/medicamentos.controller.js';
 const router = Router();
 
 router.get('/', ctrl.getMedicamentos);
-router.put('/:clave/stock', verificarToken, ctrl.updateStock); // ← nueva ruta
-router.get('/con-datos', ctrl.getMedicamentosConDatos);
+router.get('/con-datos', ctrl.getMedicamentosConDatos);        // ← primero
+router.put('/:clave/stock', verificarToken, ctrl.updateStock); // ← después
 
 export default router;
