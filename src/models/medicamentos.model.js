@@ -25,14 +25,13 @@ export const updateStock = async (clave, cantidad) => {
 
   if (!med) throw new Error('Medicamento no encontrado');
 
-  // Si cantidad es positiva = restar, verificar stock suficiente
   if (cantidad > 0 && med.stock_inicial < cantidad) {
     throw new Error('Stock insuficiente');
   }
 
   const [result] = await db.query(
     `UPDATE medicamentos SET stock_inicial = stock_inicial - ? WHERE clave = ?`,
-    [cantidad, clave] // cantidad negativa = devuelve stock automáticamente
+    [cantidad, clave]
   );
   return result;
 };
@@ -47,10 +46,13 @@ export const getPacientesPorDiaReal = async () => {
       m.proveedor,
       m.reposiciones_anio,
       COALESCE(
-        ROUND(
-          COUNT(c.id_consulta) /
-          GREATEST(DATEDIFF(MAX(c.fecha_consulta), MIN(c.fecha_consulta)), 1)
-        , 2),
+        GREATEST(
+          ROUND(
+            COUNT(c.id_consulta) /
+            GREATEST(DATEDIFF(MAX(c.fecha_consulta), MIN(c.fecha_consulta)), 1)
+          , 0),
+          1
+        ),
         m.pacientes_por_dia
       ) AS pacientes_por_dia
     FROM medicamentos m
